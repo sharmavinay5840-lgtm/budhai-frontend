@@ -66,6 +66,8 @@ export default function Dashboard() {
             <button onClick={() => setLanguage('hi')} className={`px-3 py-1 rounded text-xs ${language === 'hi' ? 'bg-blue-600 text-white' : 'text-gray-400'}`}>हिं</button>
             <button onClick={() => setLanguage('en')} className={`px-3 py-1 rounded text-xs ${language === 'en' ? 'bg-blue-600 text-white' : 'text-gray-400'}`}>EN</button>
           </div>
+          <button onClick={() => router.push('/analytics')} className="text-xs text-gray-400 hover:text-white">Analytics</button>
+          <button onClick={() => router.push('/settings')} className="text-xs text-gray-400 hover:text-white">Settings</button>
           <button onClick={logout} className="text-xs text-gray-400 hover:text-white">Logout</button>
         </div>
       </div>
