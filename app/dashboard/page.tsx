@@ -27,7 +27,7 @@ export default function Dashboard() {
     setMessage('');
 
     try {
-      `${process.env.NEXT_PUBLIC_API_URL}/api/chat/message`
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
