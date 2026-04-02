@@ -28,10 +28,25 @@ export default function Settings() {
     }));
   }, []);
 
-  const save = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+ const save = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(form)
+    });
+    if (res.ok) {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    }
+  } catch (e) {
+    console.error('Save failed:', e);
+  }
+};
 
   const industries = [
     { value: 'ecommerce', label: 'E-Commerce' },
@@ -44,7 +59,7 @@ export default function Settings() {
   ];
 
   const embedCode = `<script
-  src="https://buddhai.in/widget.js"
+  src="https://budhai-backend-production.up.railway.app/widget.js"
   data-language="${form.language}"
   data-industry="${form.industry}"
   data-position="${form.widgetPosition}">
