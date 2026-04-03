@@ -7,22 +7,21 @@ export default function Settings() {
   const [business, setBusiness] = useState<any>(null);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState({
-  businessName: '',
-  industry: 'ecommerce',
-  aiPersonality: '',
-  language: 'hi',
-  widgetPosition: 'right',
-  widgetColor: '#1a73e8',
-  // Naye fields
-  returnPolicy: '',
-  deliveryTime: '',
-  codAvailable: 'yes',
-  workingHours: '',
-  storeUrl: '',
-  paymentMethods: '',
-  shippingAreas: '',
-  topProducts: ''
-});
+    businessName: '',
+    industry: 'ecommerce',
+    aiPersonality: '',
+    language: 'hi',
+    widgetPosition: 'right',
+    widgetColor: '#1a73e8',
+    returnPolicy: '',
+    deliveryTime: '',
+    codAvailable: 'yes',
+    workingHours: '',
+    storeUrl: '',
+    paymentMethods: '',
+    shippingAreas: '',
+    topProducts: ''
+  });
 
   useEffect(() => {
     const b = localStorage.getItem('business');
@@ -37,25 +36,25 @@ export default function Settings() {
     }));
   }, []);
 
- const save = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(form)
-    });
-    if (res.ok) {
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+  const save = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(form)
+      });
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+    } catch (e) {
+      console.error('Save failed:', e);
     }
-  } catch (e) {
-    console.error('Save failed:', e);
-  }
-};
+  };
 
   const industries = [
     { value: 'ecommerce', label: 'E-Commerce' },
@@ -76,7 +75,6 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
         <div>
           <h1 className="text-xl font-bold text-blue-500">BuddhAI ☿</h1>
@@ -123,24 +121,98 @@ export default function Settings() {
           <textarea
             value={form.aiPersonality}
             onChange={e => setForm({...form, aiPersonality: e.target.value})}
-            placeholder="Jaise: Hamesha friendly raho. Returns ke liye 7 din ki policy hai. Delivery 3-5 din mein hoti hai..."
+            placeholder="Jaise: Hamesha friendly raho. Returns ke liye 7 din ki policy hai..."
             rows={4}
             className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none resize-none"
           />
         </div>
 
-        {/* AI Personality */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          ...
-          <textarea ... />
-        </div>   ← YE CLOSING TAG
-
-        {/* ← YAHAN PASTE KARO */}
         {/* Business Data — AI Accuracy */}
-        <div className="bg-gray-900 ...
-
-        {/* Widget Settings */}
-        <div className="bg-gray-900 ...
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          <h3 className="text-sm font-semibold text-gray-300 mb-1">Business Data</h3>
+          <p className="text-xs text-gray-500 mb-4">Yeh data AI ko accurate answers dene mein help karta hai</p>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">Return Policy</label>
+                <input
+                  value={form.returnPolicy}
+                  onChange={e => setForm({...form, returnPolicy: e.target.value})}
+                  placeholder="e.g. 7 din, full refund"
+                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">Delivery Time</label>
+                <input
+                  value={form.deliveryTime}
+                  onChange={e => setForm({...form, deliveryTime: e.target.value})}
+                  placeholder="e.g. 3-5 business days"
+                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">COD Available?</label>
+                <select
+                  value={form.codAvailable}
+                  onChange={e => setForm({...form, codAvailable: e.target.value})}
+                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="yes">Haan — COD available hai</option>
+                  <option value="no">Nahi — Prepaid only</option>
+                  <option value="partial">Kuch areas mein</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">Working Hours</label>
+                <input
+                  value={form.workingHours}
+                  onChange={e => setForm({...form, workingHours: e.target.value})}
+                  placeholder="e.g. Mon-Sat 9am-6pm"
+                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">Store / Website URL</label>
+              <input
+                value={form.storeUrl}
+                onChange={e => setForm({...form, storeUrl: e.target.value})}
+                placeholder="e.g. https://mystore.com"
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">Top Products / Services</label>
+              <input
+                value={form.topProducts}
+                onChange={e => setForm({...form, topProducts: e.target.value})}
+                placeholder="e.g. Kurta, Saree, Lehenga"
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">Shipping Areas</label>
+              <input
+                value={form.shippingAreas}
+                onChange={e => setForm({...form, shippingAreas: e.target.value})}
+                placeholder="e.g. Pan India, except J&K"
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">Payment Methods</label>
+              <input
+                value={form.paymentMethods}
+                onChange={e => setForm({...form, paymentMethods: e.target.value})}
+                placeholder="e.g. UPI, Credit Card, COD, Net Banking"
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Widget Settings */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
