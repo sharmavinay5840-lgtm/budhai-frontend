@@ -7,13 +7,22 @@ export default function Settings() {
   const [business, setBusiness] = useState<any>(null);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState({
-    businessName: '',
-    industry: 'ecommerce',
-    aiPersonality: '',
-    language: 'hi',
-    widgetPosition: 'right',
-    widgetColor: '#1a73e8'
-  });
+  businessName: '',
+  industry: 'ecommerce',
+  aiPersonality: '',
+  language: 'hi',
+  widgetPosition: 'right',
+  widgetColor: '#1a73e8',
+  // Naye fields
+  returnPolicy: '',
+  deliveryTime: '',
+  codAvailable: 'yes',
+  workingHours: '',
+  storeUrl: '',
+  paymentMethods: '',
+  shippingAreas: '',
+  topProducts: ''
+});
 
   useEffect(() => {
     const b = localStorage.getItem('business');
@@ -119,6 +128,19 @@ export default function Settings() {
             className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none resize-none"
           />
         </div>
+
+        {/* AI Personality */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          ...
+          <textarea ... />
+        </div>   ← YE CLOSING TAG
+
+        {/* ← YAHAN PASTE KARO */}
+        {/* Business Data — AI Accuracy */}
+        <div className="bg-gray-900 ...
+
+        {/* Widget Settings */}
+        <div className="bg-gray-900 ...
 
         {/* Widget Settings */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
