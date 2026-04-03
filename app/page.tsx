@@ -267,6 +267,8 @@ export default function Home() {
       <div className="border-t border-gray-800 py-8 text-center">
         <p className="text-gray-600 text-sm">BuddhAI — Vyapar Ki Tez Buddhi ☿</p>
         <p className="text-gray-700 text-xs mt-1">India ka #1 AI Business Platform | Support + Marketing + Sales</p>
+        <a href="/privacy" className="text-xs text-gray-400 hover:text-white">Privacy Policy</a>
+        <a href="/terms" className="text-xs text-gray-400 hover:text-white">Terms of Service</a>
       </div>
 
     </div>
