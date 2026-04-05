@@ -9,7 +9,13 @@ export default function Dashboard() {
   const [reply, setReply] = useState('');
   const [language, setLanguage] = useState('hi');
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<any[]>(() => {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('chatHistory');
+    return saved ? JSON.parse(saved) : [];
+  }
+  return [];
+});
 
   useEffect(() => {
     const b = localStorage.getItem('business');
