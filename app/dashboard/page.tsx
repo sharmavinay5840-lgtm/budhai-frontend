@@ -35,6 +35,7 @@ export default function Dashboard() {
           language,
           industry: business?.industry,
           history
+          businessId: business?.id
         })
       });
       const data = await res.json();
