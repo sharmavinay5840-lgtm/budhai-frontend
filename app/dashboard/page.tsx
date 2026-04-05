@@ -34,7 +34,7 @@ export default function Dashboard() {
           message,
           language,
           industry: business?.industry,
-          history
+          history,
           businessId: business?.id
         })
       });
