@@ -6,6 +6,7 @@ export default function Settings() {
   const router = useRouter();
   const [business, setBusiness] = useState<any>(null);
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     businessName: '',
     industry: 'ecommerce',
@@ -32,11 +33,40 @@ export default function Settings() {
     if (!b || !t) { router.push('/'); return; }
     const biz = JSON.parse(b);
     setBusiness(biz);
-    setForm(f => ({
-      ...f,
-      businessName: biz.name,
-      industry: biz.industry || 'ecommerce'
-    }));
+
+    // DB se settings load karo
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
+      headers: { 'Authorization': `Bearer ${t}` }
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data) {
+        setForm({
+          businessName: data.name || biz.name || '',
+          industry: data.industry || 'ecommerce',
+          aiPersonality: data.ai_personality || '',
+          language: data.language || 'hi',
+          widgetPosition: data.widget_position || 'right',
+          widgetColor: data.widget_color || '#1a73e8',
+          returnPolicy: data.return_policy || '',
+          deliveryTime: data.delivery_time || '',
+          codAvailable: data.cod_available || 'yes',
+          workingHours: data.working_hours || '',
+          storeUrl: data.store_url || '',
+          paymentMethods: data.payment_methods || '',
+          shippingAreas: data.shipping_areas || '',
+          topProducts: data.top_products || '',
+          relatedProducts: data.related_products || '',
+          whatsappNumber: data.whatsapp_number || '',
+          trackingUrl: data.tracking_url || ''
+        });
+      }
+      setLoading(false);
+    })
+    .catch(() => {
+      setForm(f => ({ ...f, businessName: biz.name, industry: biz.industry || 'ecommerce' }));
+      setLoading(false);
+    });
   }, []);
 
   const save = async () => {
@@ -44,10 +74,7 @@ export default function Settings() {
       const token = localStorage.getItem('token');
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(form)
       });
       if (res.ok) {
@@ -69,18 +96,28 @@ export default function Settings() {
     { value: 'generic', label: 'Other' },
   ];
 
+  const businessId = business?.id || '';
   const embedCode = `<script
   src="https://budhai-backend-production.up.railway.app/widget.js"
   data-language="${form.language}"
   data-industry="${form.industry}"
-  data-position="${form.widgetPosition}">
+  data-position="${form.widgetPosition}"
+  data-business-id="${businessId}">
 </script>`;
 
   const inp = "w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none";
 
+  if (loading) return (
+    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-4xl mb-4">☿</p>
+        <p className="text-gray-400 text-sm">Settings load ho rahi hain...</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
         <div>
           <h1 className="text-xl font-bold text-blue-500">BuddhAI ☿</h1>
@@ -116,13 +153,9 @@ export default function Settings() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <h3 className="text-sm font-semibold text-gray-300 mb-1">AI Personality</h3>
           <p className="text-xs text-gray-500 mb-4">BuddhAI ko apne business ke hisaab se customize karo</p>
-          <textarea
-            value={form.aiPersonality}
-            onChange={e => setForm({...form, aiPersonality: e.target.value})}
+          <textarea value={form.aiPersonality} onChange={e => setForm({...form, aiPersonality: e.target.value})}
             placeholder="Jaise: Hamesha friendly raho. Premium customers ko priority do..."
-            rows={3}
-            className={`${inp} resize-none`}
-          />
+            rows={3} className={`${inp} resize-none`} />
         </div>
 
         {/* Business Data */}
@@ -173,27 +206,20 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* Feature 05 — Upsell */}
+        {/* Upsell */}
         <div className="bg-gray-900 border border-blue-800 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full">NEW</span>
             <h3 className="text-sm font-semibold text-gray-300">Upsell & Cross-sell AI</h3>
           </div>
           <p className="text-xs text-gray-500 mb-4">AI automatically suggest karega — revenue badhao!</p>
-          <div>
-            <label className="text-xs text-gray-500 mb-1 block">Related Products (AI suggest karega)</label>
-            <textarea
-              value={form.relatedProducts}
-              onChange={e => setForm({...form, relatedProducts: e.target.value})}
-              placeholder="e.g. Kurte ke saath Dupatta, Saree ke saath Blouse, Lehenga ke saath Jewellery set..."
-              rows={3}
-              className={`${inp} resize-none`}
-            />
-            <p className="text-xs text-gray-600 mt-1">AI customer ki query ke hisaab se automatically suggest karega</p>
-          </div>
+          <label className="text-xs text-gray-500 mb-1 block">Related Products</label>
+          <textarea value={form.relatedProducts} onChange={e => setForm({...form, relatedProducts: e.target.value})}
+            placeholder="e.g. Kurte ke saath Dupatta, Saree ke saath Blouse..."
+            rows={3} className={`${inp} resize-none`} />
         </div>
 
-        {/* Feature 06 — Order Tracking */}
+        {/* Order Tracking */}
         <div className="bg-gray-900 border border-green-800 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs bg-green-900 text-green-300 px-2 py-0.5 rounded-full">NEW</span>
@@ -202,24 +228,14 @@ export default function Settings() {
           <p className="text-xs text-gray-500 mb-4">Customer order track kar sake — directly chat se!</p>
           <div className="space-y-4">
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">Tracking URL / Page</label>
-              <input
-                value={form.trackingUrl}
-                onChange={e => setForm({...form, trackingUrl: e.target.value})}
-                placeholder="e.g. https://mystore.com/track-order"
-                className={inp}
-              />
-              <p className="text-xs text-gray-600 mt-1">AI yeh URL customer ko dega jab wo order track karna chahe</p>
+              <label className="text-xs text-gray-500 mb-1 block">Tracking URL</label>
+              <input value={form.trackingUrl} onChange={e => setForm({...form, trackingUrl: e.target.value})}
+                placeholder="e.g. https://mystore.com/track-order" className={inp} />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">WhatsApp Support Number</label>
-              <input
-                value={form.whatsappNumber}
-                onChange={e => setForm({...form, whatsappNumber: e.target.value})}
-                placeholder="e.g. 919876543210 (country code ke saath)"
-                className={inp}
-              />
-              <p className="text-xs text-gray-600 mt-1">Complex queries ke liye AI WhatsApp pe redirect karega</p>
+              <input value={form.whatsappNumber} onChange={e => setForm({...form, whatsappNumber: e.target.value})}
+                placeholder="e.g. 919876543210" className={inp} />
             </div>
           </div>
         </div>
@@ -263,7 +279,7 @@ export default function Settings() {
           </button>
         </div>
 
-        {/* Save Button */}
+        {/* Save */}
         <button onClick={save}
           className={`w-full py-3 rounded-xl text-sm font-medium transition-all ${saved ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'} text-white`}>
           {saved ? '✓ Saved!' : 'Settings Save Karo'}
