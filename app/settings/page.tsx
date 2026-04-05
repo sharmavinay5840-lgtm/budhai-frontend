@@ -36,10 +36,24 @@ export default function Settings() {
 
     // DB se settings load karo
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
-      headers: { 'Authorization': `Bearer ${t}` }
+      headers: { 
+        'Authorization': `Bearer ${t}`,
+        'Content-Type': 'application/json'
+      }
     })
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) {
+        console.error('Settings load failed:', r.status);
+        return null;
+      }
+      return r.json();
+    })
     .then(data => {
+      if (!data || data.error) {
+        console.error('Settings error:', data?.error);
+        setLoading(false);
+        return;
+      }
       if (data) {
         setForm({
           businessName: data.name || biz.name || '',
@@ -72,6 +86,7 @@ export default function Settings() {
   const save = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) { router.push('/'); return; }
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/settings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
