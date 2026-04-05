@@ -20,7 +20,10 @@ export default function Settings() {
     storeUrl: '',
     paymentMethods: '',
     shippingAreas: '',
-    topProducts: ''
+    topProducts: '',
+    relatedProducts: '',
+    whatsappNumber: '',
+    trackingUrl: ''
   });
 
   useEffect(() => {
@@ -73,8 +76,11 @@ export default function Settings() {
   data-position="${form.widgetPosition}">
 </script>`;
 
+  const inp = "w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none";
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
         <div>
           <h1 className="text-xl font-bold text-blue-500">BuddhAI ☿</h1>
@@ -95,19 +101,11 @@ export default function Settings() {
           <div className="space-y-4">
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Business Name</label>
-              <input
-                value={form.businessName}
-                onChange={e => setForm({...form, businessName: e.target.value})}
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-              />
+              <input value={form.businessName} onChange={e => setForm({...form, businessName: e.target.value})} className={inp} />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Industry</label>
-              <select
-                value={form.industry}
-                onChange={e => setForm({...form, industry: e.target.value})}
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-              >
+              <select value={form.industry} onChange={e => setForm({...form, industry: e.target.value})} className={inp}>
                 {industries.map(i => <option key={i.value} value={i.value}>{i.label}</option>)}
               </select>
             </div>
@@ -121,95 +119,107 @@ export default function Settings() {
           <textarea
             value={form.aiPersonality}
             onChange={e => setForm({...form, aiPersonality: e.target.value})}
-            placeholder="Jaise: Hamesha friendly raho. Returns ke liye 7 din ki policy hai..."
-            rows={4}
-            className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none resize-none"
+            placeholder="Jaise: Hamesha friendly raho. Premium customers ko priority do..."
+            rows={3}
+            className={`${inp} resize-none`}
           />
         </div>
 
-        {/* Business Data — AI Accuracy */}
+        {/* Business Data */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <h3 className="text-sm font-semibold text-gray-300 mb-1">Business Data</h3>
-          <p className="text-xs text-gray-500 mb-4">Yeh data AI ko accurate answers dene mein help karta hai</p>
+          <p className="text-xs text-gray-500 mb-4">AI ko accurate answers dene ke liye yeh data zaroori hai</p>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Return Policy</label>
-                <input
-                  value={form.returnPolicy}
-                  onChange={e => setForm({...form, returnPolicy: e.target.value})}
-                  placeholder="e.g. 7 din, full refund"
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-                />
+                <input value={form.returnPolicy} onChange={e => setForm({...form, returnPolicy: e.target.value})} placeholder="e.g. 7 din, full refund" className={inp} />
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Delivery Time</label>
-                <input
-                  value={form.deliveryTime}
-                  onChange={e => setForm({...form, deliveryTime: e.target.value})}
-                  placeholder="e.g. 3-5 business days"
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-                />
+                <input value={form.deliveryTime} onChange={e => setForm({...form, deliveryTime: e.target.value})} placeholder="e.g. 3-5 business days" className={inp} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">COD Available?</label>
-                <select
-                  value={form.codAvailable}
-                  onChange={e => setForm({...form, codAvailable: e.target.value})}
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-                >
-                  <option value="yes">Haan — COD available hai</option>
+                <select value={form.codAvailable} onChange={e => setForm({...form, codAvailable: e.target.value})} className={inp}>
+                  <option value="yes">Haan — COD available</option>
                   <option value="no">Nahi — Prepaid only</option>
                   <option value="partial">Kuch areas mein</option>
                 </select>
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Working Hours</label>
-                <input
-                  value={form.workingHours}
-                  onChange={e => setForm({...form, workingHours: e.target.value})}
-                  placeholder="e.g. Mon-Sat 9am-6pm"
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-                />
+                <input value={form.workingHours} onChange={e => setForm({...form, workingHours: e.target.value})} placeholder="e.g. Mon-Sat 9am-6pm" className={inp} />
               </div>
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Store / Website URL</label>
-              <input
-                value={form.storeUrl}
-                onChange={e => setForm({...form, storeUrl: e.target.value})}
-                placeholder="e.g. https://mystore.com"
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-              />
+              <input value={form.storeUrl} onChange={e => setForm({...form, storeUrl: e.target.value})} placeholder="e.g. https://mystore.com" className={inp} />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Top Products / Services</label>
-              <input
-                value={form.topProducts}
-                onChange={e => setForm({...form, topProducts: e.target.value})}
-                placeholder="e.g. Kurta, Saree, Lehenga"
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-              />
+              <input value={form.topProducts} onChange={e => setForm({...form, topProducts: e.target.value})} placeholder="e.g. Kurta, Saree, Lehenga" className={inp} />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Shipping Areas</label>
-              <input
-                value={form.shippingAreas}
-                onChange={e => setForm({...form, shippingAreas: e.target.value})}
-                placeholder="e.g. Pan India, except J&K"
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
-              />
+              <input value={form.shippingAreas} onChange={e => setForm({...form, shippingAreas: e.target.value})} placeholder="e.g. Pan India, except J&K" className={inp} />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Payment Methods</label>
+              <input value={form.paymentMethods} onChange={e => setForm({...form, paymentMethods: e.target.value})} placeholder="e.g. UPI, Credit Card, COD" className={inp} />
+            </div>
+          </div>
+        </div>
+
+        {/* Feature 05 — Upsell */}
+        <div className="bg-gray-900 border border-blue-800 rounded-2xl p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full">NEW</span>
+            <h3 className="text-sm font-semibold text-gray-300">Upsell & Cross-sell AI</h3>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">AI automatically suggest karega — revenue badhao!</p>
+          <div>
+            <label className="text-xs text-gray-500 mb-1 block">Related Products (AI suggest karega)</label>
+            <textarea
+              value={form.relatedProducts}
+              onChange={e => setForm({...form, relatedProducts: e.target.value})}
+              placeholder="e.g. Kurte ke saath Dupatta, Saree ke saath Blouse, Lehenga ke saath Jewellery set..."
+              rows={3}
+              className={`${inp} resize-none`}
+            />
+            <p className="text-xs text-gray-600 mt-1">AI customer ki query ke hisaab se automatically suggest karega</p>
+          </div>
+        </div>
+
+        {/* Feature 06 — Order Tracking */}
+        <div className="bg-gray-900 border border-green-800 rounded-2xl p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs bg-green-900 text-green-300 px-2 py-0.5 rounded-full">NEW</span>
+            <h3 className="text-sm font-semibold text-gray-300">Order Tracking Setup</h3>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">Customer order track kar sake — directly chat se!</p>
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">Tracking URL / Page</label>
               <input
-                value={form.paymentMethods}
-                onChange={e => setForm({...form, paymentMethods: e.target.value})}
-                placeholder="e.g. UPI, Credit Card, COD, Net Banking"
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm border border-gray-700 focus:border-blue-500 focus:outline-none"
+                value={form.trackingUrl}
+                onChange={e => setForm({...form, trackingUrl: e.target.value})}
+                placeholder="e.g. https://mystore.com/track-order"
+                className={inp}
               />
+              <p className="text-xs text-gray-600 mt-1">AI yeh URL customer ko dega jab wo order track karna chahe</p>
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">WhatsApp Support Number</label>
+              <input
+                value={form.whatsappNumber}
+                onChange={e => setForm({...form, whatsappNumber: e.target.value})}
+                placeholder="e.g. 919876543210 (country code ke saath)"
+                className={inp}
+              />
+              <p className="text-xs text-gray-600 mt-1">Complex queries ke liye AI WhatsApp pe redirect karega</p>
             </div>
           </div>
         </div>
@@ -222,11 +232,8 @@ export default function Settings() {
               <label className="text-xs text-gray-500 mb-1 block">Default Language</label>
               <div className="flex gap-3">
                 {['hi', 'en'].map(l => (
-                  <button
-                    key={l}
-                    onClick={() => setForm({...form, language: l})}
-                    className={`px-4 py-2 rounded-xl text-sm border transition-all ${form.language === l ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400'}`}
-                  >
+                  <button key={l} onClick={() => setForm({...form, language: l})}
+                    className={`px-4 py-2 rounded-xl text-sm border transition-all ${form.language === l ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400'}`}>
                     {l === 'hi' ? 'Hindi' : 'English'}
                   </button>
                 ))}
@@ -236,11 +243,8 @@ export default function Settings() {
               <label className="text-xs text-gray-500 mb-1 block">Widget Position</label>
               <div className="flex gap-3">
                 {['right', 'left'].map(p => (
-                  <button
-                    key={p}
-                    onClick={() => setForm({...form, widgetPosition: p})}
-                    className={`px-4 py-2 rounded-xl text-sm border transition-all ${form.widgetPosition === p ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400'}`}
-                  >
+                  <button key={p} onClick={() => setForm({...form, widgetPosition: p})}
+                    className={`px-4 py-2 rounded-xl text-sm border transition-all ${form.widgetPosition === p ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400'}`}>
                     {p === 'right' ? 'Right Side' : 'Left Side'}
                   </button>
                 ))}
@@ -253,22 +257,15 @@ export default function Settings() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <h3 className="text-sm font-semibold text-gray-300 mb-1">Website Par Lagao</h3>
           <p className="text-xs text-gray-500 mb-4">Yeh code apni website ke &lt;/body&gt; se pehle paste karo</p>
-          <div className="bg-gray-800 rounded-xl p-4 font-mono text-xs text-green-400 whitespace-pre-wrap">
-            {embedCode}
-          </div>
-          <button
-            onClick={() => { navigator.clipboard.writeText(embedCode); }}
-            className="mt-3 text-xs text-blue-400 hover:text-blue-300"
-          >
+          <div className="bg-gray-800 rounded-xl p-4 font-mono text-xs text-green-400 whitespace-pre-wrap">{embedCode}</div>
+          <button onClick={() => navigator.clipboard.writeText(embedCode)} className="mt-3 text-xs text-blue-400 hover:text-blue-300">
             Copy Code
           </button>
         </div>
 
         {/* Save Button */}
-        <button
-          onClick={save}
-          className={`w-full py-3 rounded-xl text-sm font-medium transition-all ${saved ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
-        >
+        <button onClick={save}
+          className={`w-full py-3 rounded-xl text-sm font-medium transition-all ${saved ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'} text-white`}>
           {saved ? '✓ Saved!' : 'Settings Save Karo'}
         </button>
 
